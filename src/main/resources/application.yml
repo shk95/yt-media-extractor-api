@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: yt-media-extractor-api
+
+  config:
+    import: "application-secret.yml"
+
+app:
+  youtube-url-prefix: "https://www.youtube.com/watch?v="
+  base-path: "/app/work"
+
+  image:
+    uploader:
+      use: "imgur"
