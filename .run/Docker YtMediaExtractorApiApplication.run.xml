@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Docker YtMediaExtractorApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="DEBUG_MODE" value="true" />
+    <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <module name="yt-media-extractor-api.main" />
+    <target name="yt-media-extractor-api:latest" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="io.github.shk95.ytmediaextractorapi.YtMediaExtractorApiApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
