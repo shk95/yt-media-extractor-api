@@ -1,17 +1,27 @@
-FROM eclipse-temurin:17-jre-ubi9-minimal
+FROM eclipse-temurin:17-jdk-jammy AS builder
+WORKDIR /work
+COPY . .
+RUN ./gradlew bootJar
+
+FROM eclipse-temurin:17-jre-jammy
 LABEL authors="sh-kang"
 WORKDIR /app
-RUN microdnf update && microdnf upgrade -y && microdnf install -y python3 xz && \
+
+# install dependencies
+RUN apt-get update && apt-get upgrade -y && apt-get install -y python3 ffmpeg && apt-get clean -y && \
     curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/bin/yt-dlp && \
-    curl -L https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz \
-    -o /app/ffmpeg-master-latest-linux64-gpl.tar.xz && \
-    chmod a+rx /usr/bin/yt-dlp && \
-    tar -xvf ffmpeg-master-latest-linux64-gpl.tar.xz && rm -rf ffmpeg-master-latest-linux64-gpl.tar.xz && \
-    chmod a+rx ffmpeg-master-latest-linux64-gpl/bin/* && \
-    ln -s /app/ffmpeg-master-latest-linux64-gpl/bin/ffmpeg /usr/bin/ffmpeg && \
-    ln -s /app/ffmpeg-master-latest-linux64-gpl/bin/ffprobe /usr/bin/ffprobe
+    chmod a+rx /usr/bin/yt-dlp
+
+#RUN curl -L https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz \
+#    -o ffmpeg.tar.xz && \
+#    mkdir ffmpeg && tar -xf ffmpeg.tar.xz --strip-components=1 -C ffmpeg/ && rm -rf ffmpeg.tar.xz && \
+#    chmod a+rx ffmpeg/bin/* && \
+#    ln -s $(pwd)/ffmpeg/bin/ffmpeg /usr/bin/ffmpeg && \
+#    ln -s $(pwd)/ffmpeg/bin/ffprobe /usr/bin/ffprobe
+
+COPY --from=builder /work/build/libs/*.jar /app/yt-media-extractor-api.jar
 RUN mkdir work
-COPY build/libs/yt-media-extractor-api-*.jar /app/yt-media-extractor-api.jar
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/yt-media-extractor-api.jar"]
