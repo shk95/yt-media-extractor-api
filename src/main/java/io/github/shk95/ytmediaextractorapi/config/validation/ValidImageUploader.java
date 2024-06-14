@@ -7,11 +7,11 @@ import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = ImageUploaderValidator.class)
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ImageUploaderValidation {
+public @interface ValidImageUploader {
 
-	String message() default "Invalid value";
+	String message() default "Invalid uploader configuration.";
 
 	Class<?>[] groups() default {};
 

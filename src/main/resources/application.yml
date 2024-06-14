@@ -1,14 +1,27 @@
+server:
+  shutdown: graceful
+
 spring:
   application:
     name: yt-media-extractor-api
 
-  config:
-    import: "application-secret.yml"
-
 app:
   youtube-url-prefix: "https://www.youtube.com/watch?v="
-  base-path: "/app/work"
+  base-path: "${APP_BASE_PATH}"
 
   image:
     uploader:
-      use: "imgur"
+      use: cloudinary
+
+      imgur:
+        client-id: ${IMGUR_CLIENT_ID}
+
+      # environment-variable 을 설정하거나 나머지를 설정.
+      cloudinary:
+        environment-variable: ${CLOUDINARY_ENVIRONMENT_VARIABLE}
+        api-key: ${CLOUDINARY_API_KEY}
+        api-secret: ${CLOUDINARY_API_SECRET}
+        cloud-name: ${CLOUDINARY_CLOUD_NAME}
+
+logging:
+  config: classpath:logback-spring.xml

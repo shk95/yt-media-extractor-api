@@ -1,0 +1,33 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="yt-media-extractor-api-dev" type="docker-deploy" factoryName="dockerfile"
+                   server-name="Docker orbstack">
+        <deployment type="dockerfile">
+            <settings>
+                <option name="imageTag" value="yt-media-extractor-api:latest"/>
+                <option name="containerName" value=""/>
+                <option name="envVars">
+                    <list>
+                        <DockerEnvVarImpl>
+                            <option name="name" value="SPRING_PROFILES_ACTIVE"/>
+                            <option name="value" value="dev"/>
+                        </DockerEnvVarImpl>
+                        <DockerEnvVarImpl>
+                            <option name="name" value="APP_PORT_DEV"/>
+                            <option name="value" value="51002"/>
+                        </DockerEnvVarImpl>
+                    </list>
+                </option>
+                <option name="portBindings">
+                    <list>
+                        <DockerPortBindingImpl>
+                            <option name="containerPort" value="51002"/>
+                            <option name="hostPort" value="51002"/>
+                        </DockerPortBindingImpl>
+                    </list>
+                </option>
+                <option name="sourceFilePath" value="Dockerfile"/>
+            </settings>
+        </deployment>
+        <method v="2"/>
+    </configuration>
+</component>

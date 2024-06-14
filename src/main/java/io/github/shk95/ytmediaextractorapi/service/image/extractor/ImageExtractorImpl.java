@@ -1,10 +1,12 @@
 package io.github.shk95.ytmediaextractorapi.service.image.extractor;
 
+import io.github.shk95.ytmediaextractorapi.config.ExecutorConfig;
 import io.github.shk95.ytmediaextractorapi.service.ImageExtractor;
 import io.github.shk95.ytmediaextractorapi.service.video.downloader.VideoInterval;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.springframework.stereotype.Component;
 
@@ -14,16 +16,17 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class ImageExtractorImpl implements ImageExtractor {
 
-	@Override
-	public ImageExtracted extract(VideoInterval videoInterval) throws IOException {
-		File video = videoInterval.video(); // 이전 작업의 결과물.
-		String videoFileAbsolutePath = video.getAbsolutePath();
-		String videoId = videoInterval.videoId();
+	private final ExecutorConfig.ExecutorFactory executorFactory;
 
-		DefaultExecutor executor = DefaultExecutor.builder().get();
+	@Override
+	public ImageExtracted extract(VideoInterval videoInterval) throws ImageExtractingException {
+		String videoFileAbsolutePath = videoInterval.video().getAbsolutePath();
+
+		Executor executor = executorFactory.createExecutor();
 		CommandLine commandLine = new CommandLine("ffmpeg");
 		commandLine.addArgument("-i");
 		commandLine.addArgument(videoFileAbsolutePath, true);
@@ -39,17 +42,23 @@ public class ImageExtractorImpl implements ImageExtractor {
 		PumpStreamHandler pumpStreamHandler = new PumpStreamHandler(outputStream);
 		executor.setStreamHandler(pumpStreamHandler);
 
-		int exitValue = executor.execute(commandLine);
+		int exitValue;
+		try {
+			exitValue = executor.execute(commandLine);
+		} catch (IOException e) {
+			log.error("Error occurred while executing image extraction command : [{}]", e.getMessage(), e);
+			throw new ImageExtractingException("Error occurred while executing image extraction command.");
+		}
 
-		log.info("Video file has deleted. [{}]", video.delete());
+		log.info("Video file has deleted. [{}]", videoInterval.delete());
 		if (exitValue != 0) {
 			// 비디오 스트림이 없는등의 이유로 이미지를 추출할수없는경우.
 			log.error("Image extractor exited with an error : [{}]\n[{}]", exitValue, outputStream);
-			throw new IOException();
+			throw new ImageExtractingException("Image extraction failed.");
 		}
 
 		File image = new File(videoFileAbsolutePath + ".jpeg");
-		ImageExtracted result = new ImageExtracted(videoId, image);
+		ImageExtracted result = new ImageExtracted(image);
 		log.info("Image extraction completed. path : [{}]", result);
 		return result;
 	}

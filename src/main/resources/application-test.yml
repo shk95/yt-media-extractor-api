@@ -1,0 +1,9 @@
+spring:
+  config:
+    import: "application.yml"
+
+app:
+  base-path: "./"
+
+server:
+  port: 51002

@@ -1,13 +1,13 @@
 package io.github.shk95.ytmediaextractorapi.service;
 
+import io.github.shk95.ytmediaextractorapi.service.video.downloader.VideoDownloadingException;
 import io.github.shk95.ytmediaextractorapi.service.video.downloader.VideoInterval;
 import io.github.shk95.ytmediaextractorapi.service.video.downloader.VideoIntervalTime;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.UUID;
 
 public interface VideoDownloader {
 
-	List<VideoInterval> download(final String workingDirectory, final String videoId,final List<VideoIntervalTime> videoIntervalTimes) throws IOException;
+	VideoInterval download(final UUID fileNameUUID, final String videoId, VideoIntervalTime videoIntervalTime) throws VideoDownloadingException;
 
 }

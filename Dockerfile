@@ -21,6 +21,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y python3 ffmpeg &&
 
 COPY --from=builder /work/build/libs/*.jar /app/yt-media-extractor-api.jar
 RUN mkdir work
+ENV APP_BASE_PATH=/app/work
 
 EXPOSE 8080
 

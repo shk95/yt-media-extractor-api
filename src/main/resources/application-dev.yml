@@ -1,6 +1,16 @@
 spring:
   config:
-    import: "application.yml"
+    import:
+      - "application.yml"
+      - "application-secret.yml"
 
 app:
   base-path: "./"
+
+server:
+  port: ${APP_PORT_DEV} # 51002
+
+logging:
+  config: classpath:logback-spring-dev.xml
+  level:
+    io.github.shk95.ytmediaextractorapi.*: DEBUG

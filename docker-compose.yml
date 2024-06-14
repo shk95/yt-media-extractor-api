@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  yt-media-extractor-api:
+    image: yt-media-extractor-api:latest
+    build: .
+    volumes:
+      - yt-media-extractor-api-log:/var/log/yt-media-extractor-api
+    environment:
+      - IMGUR_CLIENT_ID
+      - CLOUDINARY_ENVIRONMENT_VARIABLE
+      - CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET
+      - CLOUDINARY_CLOUD_NAME
+
+volumes:
+  yt-media-extractor-api-log:

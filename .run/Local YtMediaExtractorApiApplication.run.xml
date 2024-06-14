@@ -1,6 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Local YtMediaExtractorApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="dev" />
+      <envs>
+          <env name="APP_PORT_DEV" value="51002"/>
+      </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="yt-media-extractor-api.main" />
     <target name="@@@LOCAL@@@" />

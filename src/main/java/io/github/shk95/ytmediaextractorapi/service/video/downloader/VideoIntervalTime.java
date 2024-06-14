@@ -1,25 +1,17 @@
 package io.github.shk95.ytmediaextractorapi.service.video.downloader;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
-public class VideoIntervalTime {
+public record VideoIntervalTime(
+		LocalTime timestamp
+) {
 
-	private final static DateTimeFormatter format = DateTimeFormatter.ofPattern("H:m:s");
-
-	// H:m:s
-	private final LocalTime timestamp;
-
-	public VideoIntervalTime(String timestamp) {
-		this.timestamp = LocalTime.parse(timestamp, format);
+	public long get() {
+		return this.timestamp.toSecondOfDay();
 	}
 
-	public String get() {
-		return this.timestamp.format(format);
-	}
-
-	public String getMinimizedInterval() {
-		return this.timestamp.plusSeconds(1).format(format);
+	public long getMinimizedInterval() {
+		return this.timestamp.plusSeconds(1).toSecondOfDay();
 	}
 
 }

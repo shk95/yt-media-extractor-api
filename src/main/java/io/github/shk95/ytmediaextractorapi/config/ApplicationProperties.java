@@ -1,6 +1,7 @@
 package io.github.shk95.ytmediaextractorapi.config;
 
-import io.github.shk95.ytmediaextractorapi.config.validation.ImageUploaderValidation;
+import io.github.shk95.ytmediaextractorapi.config.validation.ValidImageUploader;
+import io.github.shk95.ytmediaextractorapi.service.image.uploader.provider.Providers;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,11 +28,12 @@ public final class ApplicationProperties {
 
 		@Setter
 		@Getter
+		@ValidImageUploader
 		public static class Uploader {
 
-			@ImageUploaderValidation
-			private String use;
+			private Providers use;
 			private Imgur imgur;
+			private Cloudinary cloudinary;
 
 			@Setter
 			@Getter
@@ -41,6 +43,16 @@ public final class ApplicationProperties {
 
 			}
 
+			@Setter
+			@Getter
+			public static class Cloudinary {
+
+				private String cloudName;
+				private String apiKey;
+				private String apiSecret;
+				private String environmentVariable;
+
+			}
 		}
 	}
 }

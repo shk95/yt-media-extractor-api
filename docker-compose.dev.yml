@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  yt-media-extractor-api:
+    ports:
+      - "${APP_PORT_DEV}:${APP_PORT_DEV}"
+    volumes:
+      - ./logs:/var/log/yt-media-extractor-api
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - APP_PORT_DEV
