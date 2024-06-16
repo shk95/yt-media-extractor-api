@@ -20,9 +20,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y python3 ffmpeg &&
 #    ln -s $(pwd)/ffmpeg/bin/ffprobe /usr/bin/ffprobe
 
 COPY --from=builder /work/build/libs/*.jar /app/yt-media-extractor-api.jar
-RUN mkdir work
-ENV APP_BASE_PATH=/app/work
 
+ENV SPRING_PROFILES_ACTIVE=prod
+ENV APP_BASE_PATH=/app/work
+RUN mkdir work
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/yt-media-extractor-api.jar"]
