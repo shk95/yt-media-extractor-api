@@ -21,6 +21,9 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y python3 ffmpeg &&
 
 COPY --from=builder /work/build/libs/*.jar /app/yt-media-extractor-api.jar
 
+ENV TZ=Asia/Seoul
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
+
 ENV SPRING_PROFILES_ACTIVE=prod
 ENV APP_BASE_PATH=/app/work
 RUN mkdir work

@@ -7,6 +7,7 @@ services:
     volumes:
       - yt-media-extractor-api-log:/var/log/yt-media-extractor-api
     environment:
+      - TZ=${TZ:-Asia/Seoul}  # Default to Asia/Seoul
       - IMGUR_CLIENT_ID
       - CLOUDINARY_ENVIRONMENT_VARIABLE
       - CLOUDINARY_API_KEY
