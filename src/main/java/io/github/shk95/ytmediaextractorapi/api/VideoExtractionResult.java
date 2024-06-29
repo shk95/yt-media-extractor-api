@@ -1,6 +1,5 @@
 package io.github.shk95.ytmediaextractorapi.api;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.shk95.ytmediaextractorapi.service.image.uploader.ImageUploadResult;
 import lombok.Getter;
 
@@ -9,19 +8,21 @@ public record VideoExtractionResult(
 		String timestamp,
 		boolean success,
 		ImageUploadResult result,
-		Error error
+		ErrorResponse error
 ) {
 
+	static final ErrorResponse NO_ERROR = new ErrorResponse(Error.NONE.code, Error.NONE.description);
+
 	public static VideoExtractionResult success(String videoId, String timestamp, ImageUploadResult result) {
-		return new VideoExtractionResult(videoId, timestamp, true, result, Error.NONE);
+		return new VideoExtractionResult(videoId, timestamp, true, result, NO_ERROR);
 	}
 
-	public static VideoExtractionResult error(String videoId, String timestamp, Error error) {
-		return new VideoExtractionResult(videoId, timestamp, false, null, error);
+	public static VideoExtractionResult error(String videoId, String timestamp, Error error, String errorDescription) {
+		ErrorResponse e = new ErrorResponse(error.code, error.description.concat(" ").concat(errorDescription));
+		return new VideoExtractionResult(videoId, timestamp, false, null, e);
 	}
 
 	@Getter
-	@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 	public enum Error {
 		UNKNOWN(-1, "Unknown error."),
 		NONE(0, "No error."),
@@ -33,17 +34,20 @@ public record VideoExtractionResult(
 		;
 
 		private final int code;
-		private String description;
+		private final String description;
 
 		Error(int code, String description) {
 			this.code = code;
 			this.description = description;
 		}
 
-		public Error addDescription(String description) {
-			this.description = this.description.concat(" " + description);
-			return this;
-		}
+	}
+
+	private record ErrorResponse(
+			int code,
+			String description
+	) {
+
 	}
 
 }
