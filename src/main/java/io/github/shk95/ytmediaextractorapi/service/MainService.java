@@ -55,34 +55,29 @@ public class MainService {
 								.success(videoId, timestamp, imageUploadResult);
 					} catch (DateTimeParseException e) {
 						log.error("Timestamp parsing failed for videoId: {}, timestamp: {}, uuid: {}", videoId, timestamp, uuid, e);
-						return VideoExtractionResult
-								.error(videoId, timestamp,
-										VideoExtractionResult.Error.TIMESTAMP_PARSING_FAILED.addDescription(e.getMessage()));
+						return VideoExtractionResult.error(videoId, timestamp,
+								VideoExtractionResult.Error.TIMESTAMP_PARSING_FAILED, e.getMessage());
 					} catch (VideoDownloadingException e) {
 						log.error("Video Downloading failed for videoId: {}, timestamp: {}, uuid: {}", videoId, timestamp, uuid, e);
-						return VideoExtractionResult
-								.error(videoId, timestamp,
-										VideoExtractionResult.Error.VIDEO_DOWNLOAD_FAILED.addDescription(e.getMessage()));
+						return VideoExtractionResult.error(videoId, timestamp,
+								VideoExtractionResult.Error.VIDEO_DOWNLOAD_FAILED, e.getMessage());
 					} catch (ImageExtractingException e) {
 						log.error("Image Extracting failed for videoId: {}, timestamp: {}, uuid: {}", videoId, timestamp, uuid, e);
-						return VideoExtractionResult
-								.error(videoId, timestamp,
-										VideoExtractionResult.Error.IMAGE_EXTRACT_FAILED.addDescription(e.getMessage()));
+						return VideoExtractionResult.error(videoId, timestamp,
+								VideoExtractionResult.Error.IMAGE_EXTRACT_FAILED, e.getMessage());
 					} catch (ImageUploadingException e) {
 						log.error("Image Uploading failed for videoId: {}, timestamp: {}, uuid: {}", videoId, timestamp, uuid, e);
 						if (e.isApiLimitExceeded()) {
-							return VideoExtractionResult
-									.error(videoId, timestamp,
-											VideoExtractionResult.Error.IMAGE_UPLOAD_FAILED_BY_API_LIMIT.addDescription(e.getMessage()));
+							return VideoExtractionResult.error(videoId, timestamp,
+									VideoExtractionResult.Error.IMAGE_UPLOAD_FAILED_BY_API_LIMIT, e.getMessage());
+						} else {
+							return VideoExtractionResult.error(videoId, timestamp,
+									VideoExtractionResult.Error.IMAGE_UPLOAD_FAILED, e.getMessage());
 						}
-						return VideoExtractionResult
-								.error(videoId, timestamp,
-										VideoExtractionResult.Error.IMAGE_UPLOAD_FAILED.addDescription(e.getMessage()));
 					} catch (Exception e) {
 						log.error("Unknown error occurred for videoId: {}, timestamp: {}, uuid: {}", videoId, timestamp, uuid, e);
-						return VideoExtractionResult
-								.error(videoId, timestamp,
-										VideoExtractionResult.Error.UNKNOWN.addDescription(e.getMessage()));
+						return VideoExtractionResult.error(videoId, timestamp,
+								VideoExtractionResult.Error.UNKNOWN, e.getMessage());
 					}
 					return videoExtractionResult;
 				})
